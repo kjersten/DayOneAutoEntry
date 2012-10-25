@@ -1,0 +1,49 @@
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Libraries needed to run the scala tools
+	scalaTools 'org.scala-lang:scala-compiler:2.9.2'
+	scalaTools 'org.scala-lang:scala-library:2.9.2'
+
+	// compile-time dependencies
+	compile 'org.scala-lang:scala-library:2.9.2'
+	compile 'org.scala-lang:scala-compiler:2.9.2'
+	compile 'joda-time:joda-time:2.1'
+	compile 'org.joda:joda-convert:1.2'
+	
+}
+
+jar {
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	manifest { attributes 'Main-Class': 'AutoEntry' }
+}
+
+// code taken from https://groups.google.com/forum/?fromgroups=#!topic/scala-ide-user/LuEBU4bA5eM
+eclipse {
+	classpath {
+	  containers "org.scala-ide.sdt.launching.SCALA_CONTAINER"
+	  file {
+		whenMerged { classpath ->
+		  def javaRuntime = classpath.entries.find { it instanceof org.gradle.plugins.ide.eclipse.model.Container && it.path.contains('JRE_CONTAINER') }
+		  def scalaRuntime = classpath.entries.find { it instanceof org.gradle.plugins.ide.eclipse.model.Container && it.path.contains('SCALA_CONTAINER') }
+		  def scalaLib = classpath.entries.findAll {it.toString().contains("scala-library")}
+
+		   // Avoid problems with the Scala IDE
+		  classpath.entries.removeAll(scalaLib)
+
+		  // Change container order to support running unit tests
+		  if(javaRuntime != null && scalaRuntime != null) {
+			classpath.entries.remove(javaRuntime)
+			classpath.entries.remove(scalaRuntime)
+			classpath.entries.add(scalaRuntime)
+			classpath.entries.add(javaRuntime)
+		  }
+		}
+	  }
+	}
+  }
