@@ -12,17 +12,20 @@ dependencies {
 
 	// compile-time dependencies
 	compile 'org.scala-lang:scala-library:2.9.2'
-	compile 'org.scala-lang:scala-compiler:2.9.2'
 	compile 'joda-time:joda-time:2.1'
 	compile 'org.joda:joda-convert:1.2'
-	
 }
 
 jar {
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-	manifest { attributes 'Main-Class': 'AutoEntry' }
+	manifest { 
+		attributes ('Main-Class': 'net.bitzoo.dayone.AutoEntry', 
+			'Implementation-Title' : 'DayOne Auto Entry',
+			'Implementation-Version' : '1.0')
+	}
 }
 
+// workaround because Eclipse Scala plugin can't recognize jar file with version number in it
 // code taken from https://groups.google.com/forum/?fromgroups=#!topic/scala-ide-user/LuEBU4bA5eM
 eclipse {
 	classpath {
@@ -32,6 +35,7 @@ eclipse {
 		  def javaRuntime = classpath.entries.find { it instanceof org.gradle.plugins.ide.eclipse.model.Container && it.path.contains('JRE_CONTAINER') }
 		  def scalaRuntime = classpath.entries.find { it instanceof org.gradle.plugins.ide.eclipse.model.Container && it.path.contains('SCALA_CONTAINER') }
 		  def scalaLib = classpath.entries.findAll {it.toString().contains("scala-library")}
+		  
 
 		   // Avoid problems with the Scala IDE
 		  classpath.entries.removeAll(scalaLib)
