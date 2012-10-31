@@ -16,17 +16,9 @@ dependencies {
 	compile 'org.joda:joda-convert:1.2'
 }
 
-//sourceSets {
-//	main {
-//		resources {
-//			exclude(['**/*.txt'])
-//		}
-//	}
-//}
-
 jar {
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-	exclude('net/bitzoo/dayone/*.txt')
+	exclude('config/*.txt')
 	manifest { 
 		attributes ('Main-Class': 'net.bitzoo.dayone.AutoEntry', 
 			'Implementation-Title' : 'DayOne Auto Entry',
