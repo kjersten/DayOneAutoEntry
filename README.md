@@ -12,7 +12,9 @@ On your computer, create a config folder.  Copy the two files from src/main/reso
 MostRecentEntryMadeOn.txt
 template.txt
 
-Edit the template.txt file with the text you would like to have as your journal template.
+Edit the template.txt file with the text you would like to have as your journal template. 
 
-The project can now be scheduled using crontab.  In order execute the code, type:
-java -cp <path_to_DayOneAutoEntry_jar_file>:<path_to_the_config_directory> net.bitzoo.dayone.AutoEntry
+In order execute the code, type:
+>java -cp <path_to_DayOneAutoEntry_jar_file>:<path_to_the_config_directory> net.bitzoo.dayone.AutoEntry
+
+The project can now be scheduled using crontab. 
